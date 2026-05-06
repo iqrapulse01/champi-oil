@@ -289,25 +289,26 @@
     100% { opacity: 0; transform: translateY(-60px) scale(3); }
   }
 
-  /* Knife */
+  /* Knife - starts OFF-SCREEN right, slides to CAKE to CUT */
   .knife {
     position: absolute;
-    bottom: 200px;
-    right: -80px;
+    bottom: 160px;
+    right: -120px;
     width: 80px;
     height: 20px;
     opacity: 0;
     z-index: 20;
+    transform: rotate(-15deg);
   }
 
   .knife.active {
-    animation: knifeEnter 0.8s ease-out forwards;
+    animation: knifeSlideIn 0.6s ease-out forwards;
   }
 
-  @keyframes knifeEnter {
+  @keyframes knifeSlideIn {
     to {
       opacity: 1;
-      right: 60px;
+      right: 50px;
     }
   }
 
@@ -315,9 +316,21 @@
     position: absolute;
     width: 60px;
     height: 15px;
-    background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
+    background: linear-gradient(180deg, #e8e8e8 0%, #c0c0c0 50%, #a0a0a0 100%);
     border-radius: 0 50% 50% 0;
     top: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+
+  .knife-blade::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+    border-radius: 0 50% 0 0;
   }
 
   .knife-handle {
@@ -327,17 +340,92 @@
     height: 20px;
     background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
     border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   }
 
+  .knife-handle::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 3px;
+    width: 19px;
+    height: 3px;
+    background: #4a3018;
+    border-radius: 1px;
+  }
+
+  .knife-handle::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 3px;
+    width: 19px;
+    height: 3px;
+    background: #4a3018;
+    border-radius: 1px;
+  }
+
+  /* Knife cutting animation - moves to center of cake and cuts */
   .knife.cut {
-    animation: knifeCut 1s ease-in-out forwards;
+    animation: knifeCutting 1.2s ease-in-out forwards;
   }
 
-  @keyframes knifeCut {
-    0% { transform: rotate(0deg); right: 60px; }
-    30% { transform: rotate(-30deg); right: 70px; }
-    60% { transform: rotate(0deg); right: 60px; }
-    100% { transform: rotate(0deg); right: 60px; }
+  @keyframes knifeCutting {
+    0% {
+      right: 50px;
+      transform: rotate(-15deg);
+    }
+    30% {
+      right: 90px;
+      transform: rotate(-35deg);
+    }
+    50% {
+      right: 110px;
+      transform: rotate(-25deg);
+    }
+    70% {
+      right: 130px;
+      transform: rotate(-40deg);
+    }
+    100% {
+      right: 140px;
+      transform: rotate(-30deg);
+    }
+  }
+
+  /* Cake slice effect */
+  .cake.slice {
+    animation: cakeSlice 0.5s ease-out forwards;
+  }
+
+  @keyframes cakeSlice {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.02); }
+    100% { transform: translateY(0) scale(1); }
+  }
+
+  /* Cut line on cake */
+  .cut-line {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    width: 2px;
+    height: 0;
+    background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
+    opacity: 0;
+    z-index: 6;
+    transform: translateX(-50%);
+  }
+
+  .cut-line.show {
+    animation: cutLineAppear 0.3s ease-out forwards;
+  }
+
+  @keyframes cutLineAppear {
+    to {
+      height: 80px;
+      opacity: 0.8;
+    }
   }
 
   /* Flower Burst */
@@ -540,7 +628,7 @@
     <div class="card" id="card">
       <!-- Front of Card -->
       <div class="card-front" id="cardFront">
-        <div class="front-title">Happy 1st Anniversary!</div>
+        <div class="front-title">Happy 1st Year!</div>
         <div class="tap-hint">✨ Tap to Open ✨</div>
 
         <!-- Sparkles -->
@@ -562,11 +650,11 @@
         <div class="back-subtitle">One year of making dreams come true ✨</div>
 
         <div class="message">
-          <p>Assalamoalikum there👋</p>
+          <p>Assalamoalikum there, I'm a Fan & Fellow Dreamer 👋</p>
 
           <p>I'm new to the Champi family, but watching your journey has been absolutely inspiring. Seeing how much love people are showering on you today — it made me smile so big!</p>
 
-          <p>I'm honestly wondering: how does someone build this much excitement in just one year? It feels magical. Meanwhile, I've been quietly preparing my own big dream for 4 years from my village. As a single girl—with no friends etc, very limited resources-even sourcing a few items means long, exhausting trips to the city… but still, I keep going.</p>
+          <p>I'm honestly wondering: how does someone build this much excitement in just one year? It feels magical. Meanwhile, I've been quietly preparing my own big dream for 4 years from my village. As a single girl—with no friends 🥱, no support 😶, and very limited investment—even sourcing a few items means long, exhausting trips to the city… but still, I keep going.</p>
 
           <p>Your success gives me hope. In Sha Allah, very soon I'll launch my own little corner of the internet 🤍</p>
 
@@ -587,6 +675,7 @@
       <div class="cake-middle"></div>
       <div class="cake-top"></div>
       <div class="frosting"></div>
+      <div class="cut-line" id="cutLine"></div>
       <div class="candle">
         <div class="flame" id="flame">
           <div class="smoke" id="smoke"></div>
@@ -594,6 +683,7 @@
       </div>
     </div>
 
+    <!-- Knife positioned to the RIGHT of cake, will slide in and CUT -->
     <div class="knife" id="knife">
       <div class="knife-blade"></div>
       <div class="knife-handle"></div>
@@ -614,11 +704,13 @@
   const flame = document.getElementById('flame');
   const smoke = document.getElementById('smoke');
   const knife = document.getElementById('knife');
+  const cake = document.getElementById('cake');
+  const cutLine = document.getElementById('cutLine');
   const flowerBurst = document.getElementById('flowerBurst');
   const bgFlowers = document.getElementById('bgFlowers');
   const cardContainer = document.getElementById('cardContainer');
 
-  let animationStage = 0; // 0: not started, 1: cake appeared, 2: candle blown, 3: flower burst, 4: cake cut, 5: card open
+  let animationStage = 0; // 0: not started, 1: cake appeared, 2: candle blown, 3: knife cut, 4: flower burst, 5: card open
 
   // Colors for flower petals
   const petalColors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4d96ff', '#ff8a5c', '#c44569', '#f8b500', '#a8e6cf'];
@@ -698,20 +790,22 @@
           flame.classList.add('out');
           smoke.classList.add('active');
 
-          // After candle blown, flower burst
+          // After candle blown, knife CUTS the cake
           setTimeout(() => {
             animationStage = 3;
-            flowerBurst.classList.add('active');
-            bgFlowers.classList.add('active');
-            createFlowerBurst();
-            createConfetti();
+            knife.classList.add('cut');
+            cake.classList.add('slice');
+            cutLine.classList.add('show');
 
-            // After flower burst, cut cake
+            // After cake is cut, flower burst
             setTimeout(() => {
               animationStage = 4;
-              knife.classList.add('cut');
+              flowerBurst.classList.add('active');
+              bgFlowers.classList.add('active');
+              createFlowerBurst();
+              createConfetti();
 
-              // After cake cut, open card
+              // After flower burst, open card
               setTimeout(() => {
                 animationStage = 5;
                 cakeScene.style.display = 'none';
@@ -723,9 +817,9 @@
                   createConfetti();
                 }, 500);
 
-              }, 1500);
+              }, 2000);
 
-            }, 2000);
+            }, 1500);
 
           }, 1000);
 

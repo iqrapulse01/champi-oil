@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Champi Oil Celebration</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Card Container */
+  .card-container {
+    position: relative;
+    width: 380px;
+    height: 500px;
+    perspective: 1500px;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card.open {
+    transform: rotateY(-180deg);
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  }
+
+  .card-front {
+    background: linear-gradient(145deg, #2d2d44 0%, #1a1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(255,215,0,0.3);
+    overflow: hidden;
+  }
+
+  .card-front::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.05) 0%, transparent 70%);
+    animation: shimmer 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+  }
+
+  .card-back {
+    background: linear-gradient(145deg, #fff8e7 0%, #ffe4c4 50%, #ffdab9 100%);
+    transform: rotateY(180deg);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid rgba(255,215,0,0.5);
+    overflow-y: auto;
+  }
+
+  /* Front Card Content */
+  .front-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    margin-bottom: 20px;
+    z-index: 2;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+    to { text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.4); }
+  }
+
+  .tap-hint {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    margin-top: 15px;
+    z-index: 2;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Cake Animation Area */
+  .cake-scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+  }
+
+  .cake-scene.active {
+    display: flex;
+  }
+
+  /* Cake */
+  .cake {
+    position: relative;
+    width: 180px;
+    height: 140px;
+    opacity: 0;
+    transform: translateY(100px) scale(0.3);
+    animation: cakeAppear 1s ease-out forwards;
+  }
+
+  @keyframes cakeAppear {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .cake-base {
+    position: absolute;
+    bottom: 0;
+    width: 180px;
+    height: 60px;
+    background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+
+  .cake-middle {
+    position: absolute;
+    bottom: 55px;
+    left: 10px;
+    width: 160px;
+    height: 50px;
+    background: linear-gradient(180deg, #D2691E 0%, #8B4513 100%);
+    border-radius: 8px;
+  }
+
+  .cake-top {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+    width: 140px;
+    height: 40px;
+    background: linear-gradient(180deg, #F4A460 0%, #D2691E 100%);
+    border-radius: 8px;
+  }
+
+  .frosting {
+    position: absolute;
+    bottom: 135px;
+    left: 15px;
+    width: 150px;
+    height: 25px;
+    background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
+    border-radius: 15px 15px 5px 5px;
+  }
+
+  .frosting::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    width: 130px;
+    height: 15px;
+    background: #fff;
+    border-radius: 50%;
+  }
+
+  /* Candle */
+  .candle {
+    position: absolute;
+    bottom: 155px;
+    left: 85px;
+    width: 12px;
+    height: 40px;
+    background: linear-gradient(90deg, #ff6b6b 0%, #ff8e8e 50%, #ff6b6b 100%);
+    border-radius: 3px;
+    z-index: 5;
+  }
+
+  .candle::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+  }
+
+  .flame {
+    position: absolute;
+    top: -25px;
+    left: 1px;
+    width: 10px;
+    height: 20px;
+    background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 40%, #ff5722 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 0.5s ease-in-out infinite alternate;
+    box-shadow: 0 0 20px rgba(255,152,0,0.6), 0 0 40px rgba(255,87,34,0.4);
+    transform-origin: bottom center;
+  }
+
+  @keyframes flicker {
+    0% { transform: scale(1) rotate(-2deg); opacity: 1; }
+    25% { transform: scale(1.1) rotate(2deg); opacity: 0.9; }
+    50% { transform: scale(0.95) rotate(-1deg); opacity: 1; }
+    75% { transform: scale(1.05) rotate(1deg); opacity: 0.95; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .flame.out {
+    animation: flameOut 0.5s ease-out forwards;
+  }
+
+  @keyframes flameOut {
+    to {
+      transform: scale(0) translateY(-10px);
+      opacity: 0;
+    }
+  }
+
+  /* Smoke */
+  .smoke {
+    position: absolute;
+    top: -30px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    background: rgba(200,200,200,0.6);
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .smoke.active {
+    animation: smokeRise 2s ease-out forwards;
+  }
+
+  @keyframes smokeRise {
+    0% { opacity: 0.8; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-60px) scale(3); }
+  }
+
+  /* Knife */
+  .knife {
+    position: absolute;
+    bottom: 200px;
+    right: -80px;
+    width: 80px;
+    height: 20px;
+    opacity: 0;
+    z-index: 20;
+  }
+
+  .knife.active {
+    animation: knifeEnter 0.8s ease-out forwards;
+  }
+
+  @keyframes knifeEnter {
+    to {
+      opacity: 1;
+      right: 60px;
+    }
+  }
+
+  .knife-blade {
+    position: absolute;
+    width: 60px;
+    height: 15px;
+    background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
+    border-radius: 0 50% 50% 0;
+    top: 2px;
+  }
+
+  .knife-handle {
+    position: absolute;
+    right: 0;
+    width: 25px;
+    height: 20px;
+    background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+    border-radius: 3px;
+  }
+
+  .knife.cut {
+    animation: knifeCut 1s ease-in-out forwards;
+  }
+
+  @keyframes knifeCut {
+    0% { transform: rotate(0deg); right: 60px; }
+    30% { transform: rotate(-30deg); right: 70px; }
+    60% { transform: rotate(0deg); right: 60px; }
+    100% { transform: rotate(0deg); right: 60px; }
+  }
+
+  /* Flower Burst */
+  .flower-burst {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 15;
+    display: none;
+  }
+
+  .flower-burst.active {
+    display: block;
+  }
+
+  .flower-petal {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+  }
+
+  .flower-petal.animate {
+    animation: petalBurst 2s ease-out forwards;
+  }
+
+  @keyframes petalBurst {
+    0% { 
+      opacity: 1; 
+      transform: translate(0, 0) scale(0) rotate(0deg); 
+    }
+    50% { 
+      opacity: 1; 
+      transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg); 
+    }
+    100% { 
+      opacity: 0.3; 
+      transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(360deg); 
+    }
+  }
+
+  /* Background Flowers */
+  .bg-flowers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    display: none;
+  }
+
+  .bg-flowers.active {
+    display: block;
+  }
+
+  .bg-flower {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0;
+    animation: bgFlowerFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes bgFlowerFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-20px) rotate(10deg); opacity: 0.8; }
+  }
+
+  /* Card Back Content */
+  .back-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.2rem;
+    color: #8B4513;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  .back-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: #D2691E;
+    font-style: italic;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .message {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: #5a4a3a;
+    text-align: center;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .message p {
+    margin-bottom: 10px;
+  }
+
+  .signature {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.3rem;
+    color: #8B4513;
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .heart {
+    color: #e74c3c;
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  /* Sparkles */
+  .sparkle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ffd700;
+    border-radius: 50%;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Confetti for celebration */
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-in-out infinite;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
+  }
+
+  /* Flower decoration on back */
+  .flower-deco {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0.3;
+    animation: flowerSway 4s ease-in-out infinite;
+  }
+
+  @keyframes flowerSway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+
+  /* Scrollbar styling for message */
+  .message::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .message::-webkit-scrollbar-track {
+    background: rgba(139,69,19,0.1);
+    border-radius: 2px;
+  }
+
+  .message::-webkit-scrollbar-thumb {
+    background: rgba(139,69,19,0.3);
+    border-radius: 2px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .card-container {
+      width: 340px;
+      height: 450px;
+    }
+
+    .back-title {
+      font-size: 1.8rem;
+    }
+
+    .message {
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="scene">
+  <div class="card-container" id="cardContainer">
+    <div class="card" id="card">
+      <!-- Front of Card -->
+      <div class="card-front" id="cardFront">
+        <div class="front-title">Happy 1st Year!</div>
+        <div class="tap-hint">✨ Tap to Open ✨</div>
+
+        <!-- Sparkles -->
+        <div class="sparkle" style="top: 20%; left: 20%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 30%; right: 25%; animation-delay: 0.5s;"></div>
+        <div class="sparkle" style="bottom: 25%; left: 30%; animation-delay: 1s;"></div>
+        <div class="sparkle" style="bottom: 35%; right: 20%; animation-delay: 1.5s;"></div>
+      </div>
+
+      <!-- Back of Card -->
+      <div class="card-back" id="cardBack">
+        <!-- Flower decorations -->
+        <div class="flower-deco" style="top: 10px; left: 15px; animation-delay: 0s;">🌸</div>
+        <div class="flower-deco" style="top: 10px; right: 15px; animation-delay: 1s;">🌺</div>
+        <div class="flower-deco" style="bottom: 10px; left: 20px; animation-delay: 2s;">🌻</div>
+        <div class="flower-deco" style="bottom: 10px; right: 20px; animation-delay: 0.5s;">🌷</div>
+
+        <div class="back-title">Champi Oil!</div>
+        <div class="back-subtitle">One year of making dreams come true ✨</div>
+
+        <div class="message">
+          <p>Assalamoalikum there, I'm a Fan & Fellow Dreamer 👋</p>
+
+          <p>I'm new to the Champi family, but watching your journey has been absolutely inspiring. Seeing how much love people are showering on you today — it made me smile so big!</p>
+
+          <p>I'm honestly wondering: how does someone build this much excitement in just one year? It feels magical. Meanwhile, I've been quietly preparing my own big dream for 4 years from my village. As a single girl—with no friends 🥱, no support 😶, and very limited investment—even sourcing a few items means long, exhausting trips to the city… but still, I keep going.</p>
+
+          <p>Your success gives me hope. In Sha Allah, very soon I'll launch my own little corner of the internet 🤍</p>
+
+          <p>Thanks for being sweet. And for giving people relief in these hard times.</p>
+
+          <p>You deserve every bit of this celebration. <span class="heart">💛</span></p>
+
+          <p class="signature">— A fellow dreamer</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cake Scene (overlays the front) -->
+  <div class="cake-scene" id="cakeScene">
+    <div class="cake" id="cake">
+      <div class="cake-base"></div>
+      <div class="cake-middle"></div>
+      <div class="cake-top"></div>
+      <div class="frosting"></div>
+      <div class="candle">
+        <div class="flame" id="flame">
+          <div class="smoke" id="smoke"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="knife" id="knife">
+      <div class="knife-blade"></div>
+      <div class="knife-handle"></div>
+    </div>
+  </div>
+
+  <!-- Flower Burst -->
+  <div class="flower-burst" id="flowerBurst"></div>
+
+  <!-- Background Flowers -->
+  <div class="bg-flowers" id="bgFlowers"></div>
+</div>
+
+<script>
+  const card = document.getElementById('card');
+  const cardFront = document.getElementById('cardFront');
+  const cakeScene = document.getElementById('cakeScene');
+  const flame = document.getElementById('flame');
+  const smoke = document.getElementById('smoke');
+  const knife = document.getElementById('knife');
+  const flowerBurst = document.getElementById('flowerBurst');
+  const bgFlowers = document.getElementById('bgFlowers');
+  const cardContainer = document.getElementById('cardContainer');
+
+  let animationStage = 0; // 0: not started, 1: cake appeared, 2: candle blown, 3: flower burst, 4: cake cut, 5: card open
+
+  // Colors for flower petals
+  const petalColors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#4d96ff', '#ff8a5c', '#c44569', '#f8b500', '#a8e6cf'];
+  const flowerEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '🌼', '💐', '🌿'];
+
+  function createFlowerBurst() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    for (let i = 0; i < 30; i++) {
+      const petal = document.createElement('div');
+      petal.className = 'flower-petal';
+      petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
+      petal.style.left = centerX + 'px';
+      petal.style.top = centerY + 'px';
+
+      const angle = (Math.PI * 2 * i) / 30;
+      const distance = 100 + Math.random() * 200;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+
+      petal.style.setProperty('--tx', tx + 'px');
+      petal.style.setProperty('--ty', ty + 'px');
+      petal.style.animationDelay = (Math.random() * 0.5) + 's';
+
+      flowerBurst.appendChild(petal);
+
+      setTimeout(() => {
+        petal.classList.add('animate');
+      }, 50);
+    }
+
+    // Add emoji flowers
+    for (let i = 0; i < 15; i++) {
+      const flower = document.createElement('div');
+      flower.className = 'bg-flower';
+      flower.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+      flower.style.left = Math.random() * 100 + '%';
+      flower.style.top = Math.random() * 100 + '%';
+      flower.style.animationDelay = Math.random() * 3 + 's';
+      flower.style.animationDuration = (2 + Math.random() * 2) + 's';
+      bgFlowers.appendChild(flower);
+
+      setTimeout(() => {
+        flower.style.opacity = '0.6';
+      }, 100);
+    }
+  }
+
+  function createConfetti() {
+    const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b'];
+    for (let i = 0; i < 20; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.animationDelay = Math.random() * 2 + 's';
+      confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(confetti);
+    }
+  }
+
+  cardFront.addEventListener('click', function() {
+    if (animationStage === 0) {
+      animationStage = 1;
+
+      // Show cake scene
+      cakeScene.classList.add('active');
+
+      // After cake appears, show knife
+      setTimeout(() => {
+        knife.classList.add('active');
+
+        // After knife enters, blow candle
+        setTimeout(() => {
+          animationStage = 2;
+          flame.classList.add('out');
+          smoke.classList.add('active');
+
+          // After candle blown, flower burst
+          setTimeout(() => {
+            animationStage = 3;
+            flowerBurst.classList.add('active');
+            bgFlowers.classList.add('active');
+            createFlowerBurst();
+            createConfetti();
+
+            // After flower burst, cut cake
+            setTimeout(() => {
+              animationStage = 4;
+              knife.classList.add('cut');
+
+              // After cake cut, open card
+              setTimeout(() => {
+                animationStage = 5;
+                cakeScene.style.display = 'none';
+                flowerBurst.style.display = 'none';
+                card.classList.add('open');
+
+                // Add celebration effect
+                setTimeout(() => {
+                  createConfetti();
+                }, 500);
+
+              }, 1500);
+
+            }, 2000);
+
+          }, 1000);
+
+        }, 1500);
+
+      }, 1200);
+    }
+  });
+
+  // Also allow clicking anywhere on card container
+  cardContainer.addEventListener('click', function(e) {
+    if (animationStage === 0) {
+      cardFront.click();
+    }
+  });
+</script>
+
+</body>
+</html>
